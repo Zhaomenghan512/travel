@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.admin.mapper.MenuMapper">
+  <sql id="menu_col_list">
+      a.id AS id,
+      a.parent_id AS parentId,
+      a.parent_ids AS parentIds,
+      a.name AS name,
+      a.sort AS sort,
+      a.type AS type,
+      a.target AS target,
+      a.icon AS icon,
+      a.is_show AS hasShow,
+      a.permission AS permission,
+      a.create_by AS createBy,
+      a.create_date AS createDate,
+      a.update_by AS updateBy,
+      a.update_date AS updateDate,
+      a.remarks AS remarks,
+      a.del_flag AS delFlag,
+      a.tenant_id AS tenantId
+  </sql>
+
+  <select id="findAllMenus" resultType="com.travel.common.domain.SysMenu">
+    SELECT
+    <include refid="menu_col_list"/>
+    FROM sys_menu a
+    Group by a.id
+    ORDER BY a.sort
+  </select>
+
+    <!-- 保存菜单-->
+    <insert id="saveMenu" parameterType="com.travel.common.domain.SysMenu">
+        insert into sys_menu (parent_id,parent_ids,name,sort,type,target,icon,
+        is_show,permission,create_by,create_date,update_by,update_date,remarks)
+        values (#{parentId},#{parentIds},#{name},#{sort},#{type},#{target},#{icon},
+        #{hasShow},#{permission},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks})
+    </insert>
+
+    <!-- 删除菜单-->
+    <delete id="removeMenuById" parameterType="java.lang.Long">
+        delete from sys_menu where id =#{id}
+    </delete>
+
+    <!-- 修改菜单-->
+    <update id="updateMenuById" parameterType="com.travel.common.domain.SysMenu">
+        update sys_menu set name=#{name},sort=#{sort},target=#{target},icon=#{icon}
+        ,is_show=#{hasShow},permission=#{permission}
+        where id=#{id}
+    </update>
+
+
+</mapper>

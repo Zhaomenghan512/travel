@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.admin.mapper.NotesMapper">
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="title!=null and title != ''">
+                and title like concat('%',#{title},'%')
+            </if>
+        </where>
+    </sql>
+    <!-- 分页查询景区总数-->
+    <select id="queryTotal" parameterType="com.travel.common.query.NotesQuery" resultType="java.lang.Long">
+        select count(*)
+        from t_notes s
+       <include refid="whereSql"></include>
+    </select>
+
+    <select id="queryData" parameterType="com.travel.common.query.NotesQuery" resultType="com.travel.common.domain.Notes">
+        select s.*
+        from t_notes s
+        <include refid="whereSql"></include>
+            order by s.id desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+</mapper>

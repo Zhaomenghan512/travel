@@ -1,0 +1,11 @@
+// Header背景色
+$headerBgColor: #0f153e;
+$hoverColor:#3a8ee6;
+$textColor:white;
+$menuBgColor:#061f3e;
+:export {
+  headerBgColor: $headerBgColor;
+  hoverColor: $hoverColor;
+  textColor:$textColor;
+  menuBgColor:$menuBgColor;
+}

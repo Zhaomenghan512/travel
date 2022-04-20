@@ -1,0 +1,15 @@
+/* 页面切换时的过渡样式 */
+.page-enter-active,.page-leave-active{
+  transition: opacity .5s;
+}
+
+/* 打开时候过渡样式 */
+.page-enter,.page-leave-active{
+  opacity: 0;
+}
+
+/*页面顶部加载进度条*/
+.nuxt-progress{
+  background-color: skyblue;
+  height: 1px;
+}

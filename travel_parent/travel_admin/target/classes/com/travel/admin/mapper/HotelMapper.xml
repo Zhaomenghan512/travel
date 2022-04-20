@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.admin.mapper.HotelMapper">
+
+
+    <sql id="whereSql">
+        <where>
+
+            <if test="hotelname != null and hotelname != '' ">
+                and hotelname like concat('%',#{hotelname},'%')
+            </if>
+        </where>
+    </sql>
+    <!-- 分页查询酒店总数-->
+    <select id="queryTotal" parameterType="com.travel.common.query.HotelQuery" resultType="java.lang.Long">
+        select count(*) from t_hotel
+        <include refid="whereSql"></include>
+    </select>
+
+    <select id="queryData" parameterType="com.travel.common.query.HotelQuery" resultType="com.travel.common.domain.Hotel">
+        select * from t_hotel
+        <include refid="whereSql"></include>
+        limit #{start},#{pageSize}
+    </select>
+
+
+
+
+</mapper>

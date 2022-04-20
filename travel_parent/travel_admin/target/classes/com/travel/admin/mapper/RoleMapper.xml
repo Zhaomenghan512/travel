@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.admin.mapper.RoleMapper">
+
+    <select id="queryTotal" parameterType="com.travel.common.query.RoleQuery" resultType="java.lang.Long">
+        select count(*) from sys_role
+    </select>
+
+    <select id="queryData" parameterType="com.travel.common.query.RoleQuery" resultMap="roleMap">
+        select * from sys_role limit #{start},#{pageSize}
+    </select>
+
+    <resultMap id="roleMap" type="com.travel.common.domain.SysRole">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="enname" property="enname"></result>
+        <collection  property="menuList" ofType="com.travel.common.domain.SysMenu"
+                    column="id" select="queryMenuByRoleId"></collection>
+    </resultMap>
+
+    <select id="queryMenuByRoleId" resultType="com.travel.common.domain.SysMenu" parameterType="java.lang.Long">
+           SELECT
+           DISTINCT
+		   m.id,m.name
+           FROM  sys_role_menu rm
+		   LEFT JOIN sys_menu m on rm.menu_id = m.id
+		   where rm.role_id = #{roleid} and m.id is not null
+		   order by m.id
+    </select>
+
+    <!-- 保存角色-->
+    <insert id="saveRole" parameterType="com.travel.common.domain.SysRole" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_role(name,enname,role_type,data_scope,create_by,create_date,update_by,update_date)
+        values(#{name},#{enname},1,1,#{createBy},#{createDate},#{updateBy},#{updateDate})
+    </insert>
+
+    <!-- 保存角色权限中间表-->
+    <insert id="saveRoleMenu" parameterType="java.util.ArrayList">
+        insert into sys_role_menu(role_id,menu_id)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.roleId},#{item.menuId})
+        </foreach>
+    </insert>
+
+
+    <!-- 删除中间表-->
+    <delete id="removeRoleMenu" parameterType="java.lang.Long">
+         delete from sys_role_menu where role_id=#{roleId}
+    </delete>
+
+    <!-- 删除角色表-->
+    <delete id="removeRoleById" parameterType="java.lang.Long">
+        delete from sys_role where id=#{id}
+    </delete>
+
+    <!-- 查询所有角色-->
+    <select id="queryAllRole" resultType="com.travel.common.domain.SysRole">
+        select * from sys_role
+    </select>
+
+
+</mapper>

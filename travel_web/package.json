@@ -1,0 +1,25 @@
+{
+  "name": "hb-travel",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
+    "core-js": "^3.6.5",
+    "element-ui": "^2.13.2",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.2",
+    "nuxt": "^2.14.6",
+    "vue-quill-editor": "^3.0.6",
+    "vue-resource": "^1.5.1",
+    "vuex-persistedstate": "^4.0.0-beta.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/style-resources": "^1.0.0"
+  }
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.admin.mapper.SpotsMapper">
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="name != null and name != '' ">
+                and s.name like concat('%',#{name},'%')
+            </if>
+            <if test="levelid != null and levelid != 0 ">
+                and s.levelid = #{levelid}
+            </if>
+            <if test="cityid != null and cityid != 0 ">
+                and s.spotsid = #{cityid}
+            </if>
+            <if test="themeid != null and themeid != 0 ">
+                and s.themeid = #{themeid}
+            </if>
+            <if test="pricefwid != null and pricefwid == 1 ">
+                and s.price between 0 and 99
+            </if>
+            <if test="pricefwid != null and pricefwid == 2 ">
+                and s.price between 100 and 199
+            </if>
+            <if test="pricefwid != null and pricefwid == 3 ">
+                and s.price between 200 and 299
+            </if>
+            <if test="pricefwid != null and pricefwid == 4 ">
+                and s.price between 300 and 399
+            </if>
+            <if test="pricefwid != null and pricefwid == 5 ">
+                and s.price between 400 and 499
+            </if>
+            <if test="pricefwid != null and pricefwid == 6 ">
+                and s.price >= 500
+            </if>
+
+        </where>
+    </sql>
+    <!-- 分页查询景区总数-->
+    <select id="queryTotal" parameterType="com.travel.common.query.SpotsQuery" resultType="java.lang.Long">
+        select count(*)
+        from t_spots s
+        join t_city c on s.spotsid = c.id
+        join t_level l on s.levelid = l.id
+        join t_theme e on s.themeid = e.id
+       <include refid="whereSql"></include>
+    </select>
+
+    <select id="queryData" parameterType="com.travel.common.query.SpotsQuery" resultMap="spotsMap">
+        select s.*,c.id cid,c.name cname,l.id lid,l.levelname,e.id eid,e.themename
+        from t_spots s
+        join t_city c on s.spotsid = c.id
+        join t_level l on s.levelid = l.id
+        join t_theme e on s.themeid = e.id
+        <include refid="whereSql"></include>
+        <if test="orderByType !=null and orderByType =='price' ">
+            order by s.price
+        </if>
+        <if test="orderByType !=null and orderByType =='id' ">
+            order by s.id desc
+        </if>
+        limit #{start},#{pageSize}
+    </select>
+
+    <resultMap id="spotsMap" type="com.travel.common.domain.Spots">
+        <id property="id" column="id"></id>
+        <result property="city.id" column="cid"></result>
+        <result property="city.name" column="cname"></result>
+        <result property="level.id" column="lid"></result>
+        <result property="level.levelname" column="levelname"></result>
+        <result property="theme.id" column="eid"></result>
+        <result property="theme.themename" column="themename"></result>
+    </resultMap>
+
+    <select id="getSpotById" parameterType="java.lang.Long" resultMap="spotsMap">
+        select s.*,c.id cid,c.name cname,l.id lid,l.levelname,e.id eid,e.themename
+        from t_spots s
+        join t_city c on s.spotsid = c.id
+        join t_level l on s.levelid = l.id
+        join t_theme e on s.themeid = e.id
+        where s.id = #{id}
+    </select>
+
+</mapper>
